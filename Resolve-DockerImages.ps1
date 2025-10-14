@@ -79,7 +79,8 @@ function Build-DockerUrls {
             $jsonArray = "[]"
         } else {
             # Use -AsArray to ensure single items are returned as arrays too
-            $jsonArray = $fullUrls | ConvertTo-Json -Compress -AsArray
+            # Force array conversion for PowerShell JSON quirks
+            $jsonArray = @($fullUrls) | ConvertTo-Json -Compress -AsArray
         }
         
         Write-Host "🏷️  Tag: $Tag" -ForegroundColor Cyan
