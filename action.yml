@@ -1,5 +1,9 @@
 name: 'Resolve Docker Images'
 description: 'Resolves base image URLs to versioned URLs and validates they exist'
+author: 'Optivem'
+branding:
+  icon: 'package'
+  color: 'blue'
 
 inputs:
   tag:

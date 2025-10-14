@@ -1,0 +1,29 @@
+name: Test Action
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Test Resolve Docker Images Action
+        id: resolve
+        uses: ./
+        with:
+          tag: 'latest'
+          base-image-urls: |
+            hello-world
+            alpine
+      
+      - name: Display Results
+        run: |
+          echo "Resolved images: ${{ steps.resolve.outputs.image-urls }}"
+          echo "Number of images resolved: $(echo '${{ steps.resolve.outputs.image-urls }}' | jq length)"
