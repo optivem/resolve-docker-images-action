@@ -10,7 +10,7 @@ inputs:
     description: 'Tag to append to base image URLs (e.g., v1.0.4-rc)'
     required: true
   base-image-urls:
-    description: 'Base image URLs (one per line, without tag)'
+    description: 'Base image URLs (without tag). Accepts either JSON array format or newline-separated list'
     required: true
 
 outputs:

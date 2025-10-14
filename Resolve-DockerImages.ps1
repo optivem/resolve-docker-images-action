@@ -23,7 +23,25 @@ if ([string]::IsNullOrWhiteSpace($ImageUrls)) {
 }
 
 # Process and validate base URLs
-$baseUrls = $ImageUrls -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+Write-Host "🔍 Processing base image URLs..." -ForegroundColor Yellow
+
+# Try to parse as JSON first, then fall back to newline-separated
+$baseUrls = @()
+try {
+    # Check if input looks like JSON (starts with [ and ends with ])
+    $trimmedInput = $ImageUrls.Trim()
+    if ($trimmedInput.StartsWith('[') -and $trimmedInput.EndsWith(']')) {
+        Write-Host "📋 Detected JSON array format" -ForegroundColor Cyan
+        $jsonArray = $ImageUrls | ConvertFrom-Json
+        $baseUrls = $jsonArray | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+    } else {
+        Write-Host "📋 Using newline-separated format" -ForegroundColor Cyan
+        $baseUrls = $ImageUrls -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+    }
+} catch {
+    Write-Host "⚠️  JSON parsing failed, falling back to newline-separated format" -ForegroundColor Yellow
+    $baseUrls = $ImageUrls -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+}
 
 if ($baseUrls.Count -eq 0) {
     Write-Host "❌ No valid base image URLs found after processing input" -ForegroundColor Red
@@ -57,7 +75,12 @@ function Build-DockerUrls {
         }
         
         # Create JSON array (force array format even for single items)
-        $jsonArray = $fullUrls | ConvertTo-Json -Compress -AsArray
+        if ($fullUrls.Count -eq 0) {
+            $jsonArray = "[]"
+        } else {
+            # Use -AsArray to ensure single items are returned as arrays too
+            $jsonArray = $fullUrls | ConvertTo-Json -Compress -AsArray
+        }
         
         Write-Host "🏷️  Tag: $Tag" -ForegroundColor Cyan
         foreach ($url in $fullUrls) {
