@@ -4,6 +4,7 @@
 [![Release](https://github.com/optivem/resolve-docker-images-action/actions/workflows/release.yml/badge.svg)](https://github.com/optivem/resolve-docker-images-action/actions/workflows/release.yml)
 
 [![GitHub release](https://img.shields.io/github/release/optivem/resolve-docker-images-action.svg)](https://github.com/optivem/resolve-docker-images-action/releases)
+[![GitHub](https://img.shields.io/github/license/optivem/resolve-docker-images-action)](LICENSE)
 
 A GitHub Action that resolves base Docker image URLs to versioned URLs and validates that the images exist in the registry.
 
